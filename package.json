@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react": "^16.6.0",
-    "react-dom": "^16.6.0",
-    "react-scripts": "2.1.0"
+    "flow-bin": "^0.87.0",
+    "react": "^16.7.0-alpha",
+    "react-dom": "^16.7.0-alpha",
+    "react-scripts": "2.1.0",
+    "react-shadow": "^16.3.1"
   },
   "scripts": {
     "start": "react-scripts start",

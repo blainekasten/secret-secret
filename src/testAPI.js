@@ -1,9 +1,9 @@
 // @flow
 
 import Wrapper from "./wrapper";
-import { FAIL_TEST, CALLSTACK_TOO_DEEP } from "./effects";
-import type { Fiber } from "./types/Fiber";
+import { FAIL_TEST } from "./effects";
 import { getRoot } from "./root";
+import internalFind from "./querying";
 
 // tasks and such
 const queueTask = (
@@ -19,11 +19,13 @@ const queueTask = (
       } catch (e) {
         attempt++;
 
+        // TODO: Should this be configurable? or maybe by each call?
         if (attempt === 5) {
           reject(FAIL_TEST);
           return;
         }
 
+        // Time to wait before trying again
         setTimeout(runTask, 1000);
       }
     }
@@ -32,49 +34,9 @@ const queueTask = (
   });
 };
 
-function internalFind(selector: string, current: Fiber): Fiber {
-  let found: ?Fiber;
-  let currentFiber = current;
-  let depth = 0;
-
-  // OPTIMIZE: we flip back and forth on siblings if there is no further depth to go
-  // the only way we get out of it is bailng on depth. But thats probably error prone too.
-
-  while (!found && currentFiber) {
-    depth++;
-    if (depth > 100) {
-      // console.log(CALLSTACK_TOO_DEEP, { currentFiber });
-      throw new Error(CALLSTACK_TOO_DEEP);
-    }
-
-    if (currentFiber.type === selector) {
-      found = currentFiber;
-      continue;
-    }
-
-    if (currentFiber.sibling) {
-      const maybeFoundNode = internalFind(selector, currentFiber.sibling);
-
-      if (maybeFoundNode) {
-        found = maybeFoundNode;
-        continue;
-      }
-    } else {
-      currentFiber = currentFiber.child;
-    }
-  }
-
-  if (!found) {
-    // This path should never get hit.
-    throw new Error("Make flow happy.");
-  }
-
-  return found;
-}
-
 export function find(selector: string) {
   return queueTask(["find", selector], () => {
-    const fiber = internalFind(selector, getRoot()._internalRoot.current);
-    return new Wrapper(fiber);
+    const fibers = internalFind(selector, getRoot()._internalRoot.current);
+    return fibers.map(fiber => new Wrapper(fiber));
   });
 }

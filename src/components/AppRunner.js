@@ -1,6 +1,6 @@
 // @flow
 import * as React from "react";
-import type { RemountCompletedCallback } from "./types/TestRunner";
+import type { RemountCompletedCallback } from "../types/TestRunner";
 
 type Props = {
   children: React.Node,

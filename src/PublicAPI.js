@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import ReactDOM from "react-dom";
-import AppRunner from "./AppRunner";
-import TestRunner from "./TestRunner";
+import AppRunner from "./components/AppRunner";
+import TestRunner from "./components/TestRunner";
 import "./globalTestApis";
 import { createRoot } from "./root";
 import type { RemountCompletedCallback, Watcher } from "./types/TestRunner";

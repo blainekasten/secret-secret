@@ -1,18 +1,18 @@
 // @flow
 import React from "react";
 import TestLine from "./TestLine";
-import { clearGlobals, exposeGlobalsForTestRequire } from "./globalTestApis";
-import { SUCCESS } from "./effects";
-import type { Log } from "./types/Log";
-import type { RemountCompletedCallback, TestBlock } from "./types/TestRunner";
-import * as TestAPIs from "./testAPI";
+import { clearGlobals, exposeGlobalsForTestRequire } from "../globalTestApis";
+import { SUCCESS } from "../effects";
+import type { Log } from "../types/Log";
+import type { RemountCompletedCallback, TestBlock } from "../types/TestRunner";
+import * as TestAPIs from "../testAPI";
 
 type Props = {
   requestAppRefresh(url: string, cb: RemountCompletedCallback): void
 };
 
 const TestStyles = {
-  position: "absolute",
+  position: "fixed",
   borderTop: "1px solid gray",
   overflow: "scroll",
   bottom: 0,
@@ -48,21 +48,21 @@ export default class TestRunner extends React.Component<Props, State> {
     });
 
     // TODO: Figure out how were going to auto find and run all tests
-    require("./__tests__/App.test.js");
+    require("../__tests__/App.test.js");
     clearGlobals();
   }
 
   componentDidUpdate() {
-    if (
-      this.state.running === false &&
-      this.state.tests.length > 0 &&
-      this.state.startedAutorun === false
-    ) {
-      this.setState(
-        { running: true, startedAutorun: true },
-        this.incrementNextTestIfExists()
-      );
-    }
+    // if (
+    //   this.state.running === false &&
+    //   this.state.tests.length > 0 &&
+    //   this.state.startedAutorun === false
+    // ) {
+    //   this.setState(
+    //     { running: true, startedAutorun: true },
+    //     this.incrementNextTestIfExists()
+    //   );
+    // }
   }
 
   log(...messages: Array<string>) {

@@ -1,5 +1,18 @@
 import React from "react";
 import * as ReactDOM from "../PublicAPI";
-import App from "./App";
+import { Provider, Client } from "urql";
+import "bulma/css/bulma.css";
+import "./index.css";
+import App from "./components/App";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+const client = new Client({
+  url: "https://carlospaelinck.io/formidable-shopping-cart-service"
+});
+
+const AppWithProvider = () => (
+  <Provider client={client}>
+    <App />
+  </Provider>
+);
+
+ReactDOM.render(<AppWithProvider />, document.getElementById("root"));

@@ -1,6 +1,6 @@
 // @flow
 import React from "react";
-import type { Log } from "./types/Log";
+import type { Log } from "../types/Log";
 
 type Props = {
   disabled: boolean,

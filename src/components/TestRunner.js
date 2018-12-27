@@ -2,7 +2,7 @@
 import React from "react";
 import TestLine from "./TestLine";
 import { clearGlobals, exposeGlobalsForTestRequire } from "../globalTestApis";
-import { SUCCESS } from "../effects";
+import { type ErrorEffect, effect } from "../effects";
 import type { Log } from "../types/Log";
 import type { RemountCompletedCallback, TestBlock } from "../types/TestRunner";
 import * as TestAPIs from "../testAPI";
@@ -48,11 +48,12 @@ export default class TestRunner extends React.Component<Props, State> {
     });
 
     // TODO: Figure out how were going to auto find and run all tests
-    require("../__tests__/App.test.js");
+    require("../__itests__/App.js");
     clearGlobals();
   }
 
   componentDidUpdate() {
+    // This code auto ran the codebase on mount. Do we want this feature?
     // if (
     //   this.state.running === false &&
     //   this.state.tests.length > 0 &&
@@ -82,14 +83,14 @@ export default class TestRunner extends React.Component<Props, State> {
   runTest() {
     const { test } = this.getTest();
 
-    test(TestAPIs).catch(e => {
-      if (e.message === SUCCESS) {
+    test(TestAPIs).catch((e: ErrorEffect) => {
+      if (e.__reason === effect.SUCCESS) {
         this.log(`Success!`);
         this.incrementNextTestIfExists();
         return;
       }
 
-      this.log("Fail!");
+      this.log(`Fail - ${e.__reason}`);
       this.log(e.message);
       this.log(e.stack);
 

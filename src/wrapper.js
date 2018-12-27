@@ -3,9 +3,11 @@
 import type { Fiber } from "./types/Fiber";
 
 export default class Wrapper {
+  selector: string;
   fiber: Fiber;
 
-  constructor(fiber: Fiber) {
+  constructor(selector: string, fiber: Fiber) {
+    this.selector = selector;
     this.fiber = fiber;
   }
 

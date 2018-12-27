@@ -23,7 +23,7 @@ export const render = (app: React.Node, domNode: HTMLElement) => {
   //
   // The flow of goes like this:
   //
-  // 1. Test finishes and there is another test to run,
+  // 1.  Test finishes and there is another test to run,
   // 1a. TestRunner calls `requestAppRefresh` with a callback `A` to run the next test.
   // 2.  AppRunner bound itself to the refresh variable below when it constructed, so when 1a calls it the following happens:
   // 2a. AppRunner setsState to unmount: true (rendering null)

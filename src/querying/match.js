@@ -10,16 +10,12 @@ export function isFiberMatchingSelector(
   selector: SingleSelector
 ) {
   try {
-    // A quick check for components
-    if (
-      isComponentSelector(selector) &&
-      typeof fiber.type === "function" &&
-      fiber.type.name === selector
-    ) {
-      return true;
-    }
-
     const selectorParts = seperateElementParts(selector);
+
+    // A quick check for components
+    if (selectorParts.length === 0 && isComponentSelector(selector)) {
+      return typeof fiber.type === "function" && fiber.type.name === selector;
+    }
 
     return fiberMatchesAllParts(fiber, selectorParts);
   } catch (e) {
@@ -72,12 +68,8 @@ function seperateElementParts(selector): Array<ParsedSelector> {
   ].filter(selector => !!selector);
 }
 
-function isComponentSelector(selector: SingleSelector): null | ParsedSelector {
-  // Product !== product
-  return {
-    type: SelectorType.COMPONENT,
-    query: selector[0].toLowerCase() !== selector[0]
-  };
+function isComponentSelector(selector: SingleSelector): boolean {
+  return selector[0].toLowerCase() !== selector[0];
 }
 
 function extractElement(selector: SingleSelector): null | ParsedSelector {

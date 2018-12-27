@@ -1,7 +1,7 @@
 // @flow
 
 import Wrapper from "./wrapper";
-import { FAIL_TEST } from "./effects";
+import { effect, nameEffect } from "./effects";
 import { getRoot } from "./root";
 import internalFind from "./querying";
 
@@ -21,7 +21,7 @@ const queueTask = (
 
         // TODO: Should this be configurable? or maybe by each call?
         if (attempt === 5) {
-          reject(FAIL_TEST);
+          reject(nameEffect(e, effect.FAIL_TEST));
           return;
         }
 
@@ -37,6 +37,6 @@ const queueTask = (
 export function find(selector: string) {
   return queueTask(["find", selector], () => {
     const fibers = internalFind(selector, getRoot()._internalRoot.current);
-    return fibers.map(fiber => new Wrapper(fiber));
+    return fibers.map(fiber => new Wrapper(selector, fiber));
   });
 }

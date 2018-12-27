@@ -1,6 +1,6 @@
 // @flow
 
-import { SUCCESS } from "./effects";
+import { nameEffect, effect } from "./effects";
 import type { TestBlock, TestFunction } from "./types/TestRunner";
 
 type PushToTestHook = TestBlock => void;
@@ -21,10 +21,10 @@ window.expect = val => {
   return {
     toBe(val2) {
       if (val !== val2) {
-        throw new Error(`${val} !== ${val2}`);
+        throw new nameEffect(new Error(`${val} !== ${val2}`), effect.FAIL_TEST);
       }
 
-      throw new Error(SUCCESS);
+      throw nameEffect(new Error(), effect.SUCCESS);
     }
   };
 };
